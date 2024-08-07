@@ -1,6 +1,5 @@
-// import { orderBurgerApi } from '../utils/burger-api';
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getOrdersApi, orderBurgerApi } from '@api';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
 type TOrdersState = {
@@ -36,18 +35,6 @@ export const getOrders = createAsyncThunk('orders/getOrderBurger', async () => {
   }
 });
 
-export const getOrderByNumber = createAsyncThunk(
-  'orders/getOrderByNumber',
-  async (data: number) => {
-    try {
-      const res = await getOrderByNumberApi(data);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
-  }
-);
-
 const orderSlice = createSlice({
   name: 'order',
   initialState,
@@ -72,22 +59,10 @@ const orderSlice = createSlice({
       .addCase(getOrders.pending, (state) => {
         state.orderRequest = true;
       })
-      .addCase(getOrders.fulfilled, (state, action) => {
+      .addCase(getOrders.fulfilled, (state) => {
         state.orderRequest = false;
-        // state.orderModalData = action.payload[0];
       })
       .addCase(getOrders.rejected, (state, action) => {
-        state.orderRequest = false;
-        state.error = action.error.message;
-      })
-      .addCase(getOrderByNumber.pending, (state) => {
-        state.orderRequest = true;
-      })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = action.payload.orders[0];
-      })
-      .addCase(getOrderByNumber.rejected, (state, action) => {
         state.orderRequest = false;
         state.error = action.error.message;
       });

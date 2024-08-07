@@ -15,12 +15,14 @@ type TUserState = {
   user: TUser | null;
   isAuthCheck: boolean;
   isLoadingUser: boolean;
+  error: string | undefined;
 };
 
 const initialState: TUserState = {
   user: null,
   isAuthCheck: false,
-  isLoadingUser: false
+  isLoadingUser: false,
+  error: undefined
 };
 
 export const loginUser = createAsyncThunk(
@@ -100,9 +102,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isLoadingUser = false;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoadingUser = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
       })
       .addCase(registerUser.pending, (state) => {
         state.isLoadingUser = true;
@@ -111,9 +113,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isLoadingUser = false;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoadingUser = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
       })
       .addCase(checkAuthUser.pending, (state) => {
         state.isLoadingUser = true;
@@ -122,9 +124,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isLoadingUser = false;
       })
-      .addCase(checkAuthUser.rejected, (state) => {
+      .addCase(checkAuthUser.rejected, (state, action) => {
         state.isLoadingUser = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoadingUser = true;
@@ -133,9 +135,9 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.isLoadingUser = false;
       })
-      .addCase(updateUser.rejected, (state) => {
+      .addCase(updateUser.rejected, (state, action) => {
         state.isLoadingUser = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;

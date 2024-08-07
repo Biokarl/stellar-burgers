@@ -1,21 +1,17 @@
-import {
-  createAction,
-  createAsyncThunk,
-  createSlice,
-  PayloadAction
-} from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
-import { nanoid } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { TIngredient } from '@utils-types';
 import { getIngredientsApi } from '@api';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
   isIngredientsLoading: boolean;
+  error: string | undefined;
 };
 
 const initialState: TIngredientsState = {
   ingredients: [],
-  isIngredientsLoading: false
+  isIngredientsLoading: false,
+  error: undefined
 };
 
 export const fetchIngredients = createAsyncThunk(
@@ -38,7 +34,7 @@ const ingredientSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.isIngredientsLoading = true;
-        // state.error = null;
+        state.error = undefined;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.isIngredientsLoading = false;
@@ -46,7 +42,7 @@ const ingredientSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isIngredientsLoading = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
       });
   }
 });

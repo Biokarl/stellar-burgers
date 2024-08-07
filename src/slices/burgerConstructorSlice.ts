@@ -1,13 +1,6 @@
-import {
-  ActionCreatorWithPayload,
-  createAction,
-  createAsyncThunk,
-  createSlice,
-  PayloadAction
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { nanoid } from '@reduxjs/toolkit';
-import { getIngredientsApi } from '@api';
 
 type TBurgerConstructorState = {
   bun: TConstructorIngredient | null;

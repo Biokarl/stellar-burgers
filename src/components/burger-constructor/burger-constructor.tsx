@@ -1,15 +1,12 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { cleanSelectedOrder, fetchOrders } from '../../slices/ordersSlice';
 import { cleanSelectedIngredient } from '../../slices/burgerConstructorSlice';
 import { useNavigate } from 'react-router-dom';
-import { DestructuringAssignment } from 'typescript';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-
   const { bun, ingredients } = useSelector(
     (store) => store['burger-constructor']
   );

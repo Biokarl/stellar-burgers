@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from '../../services/store';
 import { getFeeds } from '../../slices/feedSlice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
   const orders = useSelector((store) => store.feed.orders);
   const dispatch = useDispatch();
 
@@ -21,5 +20,3 @@ export const Feed: FC = () => {
     />
   );
 };
-
-// export default Feed;

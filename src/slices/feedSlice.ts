@@ -1,22 +1,23 @@
-import { getFeedsApi } from '@api';
+import { getFeedsApi, getOrderByNumberApi } from '@api';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder, TOrdersData } from '@utils-types';
-import { stat } from 'fs';
 
 interface FeedState {
   orders: TOrder[];
+  order: TOrder | null;
   total: number;
   totalToday: number;
   isLoading: boolean;
-  // error: string | undefined;
+  error: string | undefined;
 }
 
 export const initialState: FeedState = {
   orders: [],
+  order: null,
   total: 0,
   totalToday: 0,
-  isLoading: false
-  // error: undefined
+  isLoading: false,
+  error: undefined
 };
 
 export const getFeeds = createAsyncThunk('feed/getAll', async () => {
@@ -28,14 +29,23 @@ export const getFeeds = createAsyncThunk('feed/getAll', async () => {
   }
 });
 
+export const getOrderByNumber = createAsyncThunk(
+  'orders/getOrderByNumber',
+  async (data: number) => {
+    try {
+      const res = await getOrderByNumberApi(data);
+      return res;
+    } catch (error) {
+      throw new Error((error as { message: string }).message);
+    }
+  }
+);
+
 export const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
     orders: (state: FeedState, action) => {
-      state.orders = action.payload;
-    },
-    order: (state: FeedState, action) => {
       state.orders = action.payload;
     },
     total: (state: FeedState, action) => {
@@ -52,7 +62,7 @@ export const feedSlice = createSlice({
       })
       .addCase(getFeeds.rejected, (state, action) => {
         state.isLoading = false;
-        // state.error = action.error.message;
+        state.error = action.error.message;
       })
       .addCase(
         getFeeds.fulfilled,
@@ -61,11 +71,26 @@ export const feedSlice = createSlice({
           state.orders = action.payload.orders;
           state.total = action.payload.total;
           state.totalToday = action.payload.totalToday;
-          // state.error = undefined;
+          state.error = undefined;
         }
-      );
+      )
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.order = action.payload.orders[0];
+      })
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      });
+  },
+  selectors: {
+    orderSelector: (state) => state.order
   }
 });
 
-export const { orders, total, totalToday, order } = feedSlice.actions;
+export const { orderSelector } = feedSlice.selectors;
+export const { orders, total, totalToday } = feedSlice.actions;
 export const reducer = feedSlice.reducer;
