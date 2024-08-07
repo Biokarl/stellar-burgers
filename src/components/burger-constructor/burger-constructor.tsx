@@ -4,6 +4,8 @@ import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
 import { cleanSelectedOrder, fetchOrders } from '../../slices/ordersSlice';
 import { cleanSelectedIngredient } from '../../slices/burgerConstructorSlice';
+import { useNavigate } from 'react-router-dom';
+import { DestructuringAssignment } from 'typescript';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -12,20 +14,25 @@ export const BurgerConstructor: FC = () => {
     (store) => store['burger-constructor']
   );
   const { orderModalData, orderRequest } = useSelector((store) => store.order);
-  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.user);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const constructorItems = {
     bun: bun,
     ingredients: ingredients
   };
 
-  const data = bun?._id ? [...ingredients.map((el) => el._id), bun?._id] : [];
-
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    if (!user) {
+      navigate('/register');
+      return;
+    }
+
+    const data = bun?._id ? [...ingredients.map((el) => el._id), bun?._id] : [];
     dispatch(fetchOrders(data));
   };
-
   const closeOrderModal = () => {
     dispatch(cleanSelectedIngredient());
     dispatch(cleanSelectedOrder());
@@ -40,7 +47,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
   return (
     <BurgerConstructorUI
       price={price}

@@ -1,16 +1,18 @@
 // import { orderBurgerApi } from '../utils/burger-api';
-import { getOrdersApi, orderBurgerApi } from '@api';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@api';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
-type TIngredientsState = {
+type TOrdersState = {
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  error: string | undefined;
 };
 
-const initialState: TIngredientsState = {
+const initialState: TOrdersState = {
   orderRequest: false,
-  orderModalData: null
+  orderModalData: null,
+  error: undefined
 };
 
 export const fetchOrders = createAsyncThunk(
@@ -18,6 +20,27 @@ export const fetchOrders = createAsyncThunk(
   async (data: string[]) => {
     try {
       const res = await orderBurgerApi(data);
+      return res;
+    } catch (error) {
+      throw new Error((error as { message: string }).message);
+    }
+  }
+);
+
+export const getOrders = createAsyncThunk('orders/getOrderBurger', async () => {
+  try {
+    const res = await getOrdersApi();
+    return res;
+  } catch (error) {
+    throw new Error((error as { message: string }).message);
+  }
+});
+
+export const getOrderByNumber = createAsyncThunk(
+  'orders/getOrderByNumber',
+  async (data: number) => {
+    try {
+      const res = await getOrderByNumberApi(data);
       return res;
     } catch (error) {
       throw new Error((error as { message: string }).message);
@@ -42,9 +65,31 @@ const orderSlice = createSlice({
         state.orderModalData = action.payload.order;
         state.orderRequest = false;
       })
-      .addCase(fetchOrders.rejected, (state) => {
+      .addCase(fetchOrders.rejected, (state, action) => {
         state.orderRequest = false;
-        // state.error = action.error.message || 'Произошла ошибка';
+        state.error = action.error.message || 'Произошла ошибка';
+      })
+      .addCase(getOrders.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        // state.orderModalData = action.payload[0];
+      })
+      .addCase(getOrders.rejected, (state, action) => {
+        state.orderRequest = false;
+        state.error = action.error.message;
+      })
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.orderModalData = action.payload.orders[0];
+      })
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.orderRequest = false;
+        state.error = action.error.message;
       });
   }
 });

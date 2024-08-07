@@ -7,11 +7,15 @@ import {
 import { reducer as ingredientReducer } from '../slices/ingredientsSlice';
 import { reducer as burgerConstructorSlice } from '../slices/burgerConstructorSlice';
 import { reducer as orderSlice } from '../slices/ordersSlice';
+import { reducer as userSlice } from '../slices/userSlice';
+import { reducer as feedSlice } from '../slices/feedSlice';
 
 const rootReducer = combineReducers({
   ingredients: ingredientReducer,
   'burger-constructor': burgerConstructorSlice,
-  order: orderSlice
+  order: orderSlice,
+  user: userSlice,
+  feed: feedSlice
 });
 
 const store = configureStore({
