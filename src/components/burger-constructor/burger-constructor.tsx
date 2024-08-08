@@ -27,9 +27,12 @@ export const BurgerConstructor: FC = () => {
       return;
     }
 
-    const data = bun?._id ? [...ingredients.map((el) => el._id), bun?._id] : [];
+    const data = bun?._id
+      ? [bun?._id, ...ingredients.map((el) => el._id), bun?._id]
+      : [];
     dispatch(fetchOrders(data));
   };
+
   const closeOrderModal = () => {
     dispatch(cleanSelectedIngredient());
     dispatch(cleanSelectedOrder());

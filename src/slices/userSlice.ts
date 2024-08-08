@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TUser } from '@utils-types';
+import { TOrder, TUser } from '@utils-types';
 import {
+  getOrdersApi,
   getUserApi,
   loginUserApi,
   logoutApi,
@@ -15,6 +16,7 @@ type TUserState = {
   user: TUser | null;
   isAuthCheck: boolean;
   isLoadingUser: boolean;
+  orders: TOrder[];
   error: string | undefined;
 };
 
@@ -22,67 +24,53 @@ const initialState: TUserState = {
   user: null,
   isAuthCheck: false,
   isLoadingUser: false,
+  orders: [],
   error: undefined
 };
 
 export const loginUser = createAsyncThunk(
   'user/login',
   async (data: TLoginData) => {
-    try {
-      const res = await loginUserApi(data);
-      setCookie('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
+    const res = await loginUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return res;
   }
 );
+
+export const getOrders = createAsyncThunk('orders/getOrderBurger', async () => {
+  const res = await getOrdersApi();
+  return res;
+});
 
 export const registerUser = createAsyncThunk(
   'user/register',
   async (data: TRegisterData) => {
-    try {
-      const res = await registerUserApi(data);
-      setCookie('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
+    const res = await registerUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return res;
   }
 );
 
 export const updateUser = createAsyncThunk(
   'user/updateUser',
   async (user: Partial<TRegisterData>) => {
-    try {
-      const res = await updateUserApi(user);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
+    const res = await updateUserApi(user);
+    return res;
   }
 );
 
 export const checkAuthUser = createAsyncThunk('user/check', async () => {
-  try {
-    const res = await getUserApi();
-    return res;
-  } catch (error) {
-    throw new Error((error as { message: string }).message);
-  }
+  const res = await getUserApi();
+  return res;
 });
 
 export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
-  try {
-    const res = await logoutApi();
-    deleteCookie('accessToken');
-    localStorage.removeItem('refreshToken');
-    return res;
-  } catch (error) {
-    throw new Error((error as { message: string }).message);
-  }
+  const res = await logoutApi();
+  deleteCookie('accessToken');
+  localStorage.removeItem('refreshToken');
+  return res;
 });
 
 const userSlice = createSlice({
@@ -141,6 +129,17 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
+      })
+      .addCase(getOrders.pending, (state) => {
+        state.isLoadingUser = true;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.orders = action.payload;
+        state.isLoadingUser = false;
+      })
+      .addCase(getOrders.rejected, (state, action) => {
+        state.isLoadingUser = false;
+        state.error = action.error.message;
       });
   }
 });

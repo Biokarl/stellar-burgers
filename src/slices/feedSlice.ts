@@ -21,23 +21,15 @@ export const initialState: FeedState = {
 };
 
 export const getFeeds = createAsyncThunk('feed/getAll', async () => {
-  try {
-    const data = await getFeedsApi();
-    return data;
-  } catch (error) {
-    throw new Error((error as { message: string }).message);
-  }
+  const data = await getFeedsApi();
+  return data;
 });
 
 export const getOrderByNumber = createAsyncThunk(
   'orders/getOrderByNumber',
   async (data: number) => {
-    try {
-      const res = await getOrderByNumberApi(data);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
+    const res = await getOrderByNumberApi(data);
+    return res;
   }
 );
 

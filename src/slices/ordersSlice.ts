@@ -17,23 +17,10 @@ const initialState: TOrdersState = {
 export const fetchOrders = createAsyncThunk(
   'orders/postOrderBurger',
   async (data: string[]) => {
-    try {
-      const res = await orderBurgerApi(data);
-      return res;
-    } catch (error) {
-      throw new Error((error as { message: string }).message);
-    }
+    const res = await orderBurgerApi(data);
+    return res;
   }
 );
-
-export const getOrders = createAsyncThunk('orders/getOrderBurger', async () => {
-  try {
-    const res = await getOrdersApi();
-    return res;
-  } catch (error) {
-    throw new Error((error as { message: string }).message);
-  }
-});
 
 const orderSlice = createSlice({
   name: 'order',
@@ -55,16 +42,6 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.rejected, (state, action) => {
         state.orderRequest = false;
         state.error = action.error.message || 'Произошла ошибка';
-      })
-      .addCase(getOrders.pending, (state) => {
-        state.orderRequest = true;
-      })
-      .addCase(getOrders.fulfilled, (state) => {
-        state.orderRequest = false;
-      })
-      .addCase(getOrders.rejected, (state, action) => {
-        state.orderRequest = false;
-        state.error = action.error.message;
       });
   }
 });
