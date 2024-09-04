@@ -9,7 +9,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../utils/burger-api';
 import { deleteCookie, setCookie } from '../utils/cookie';
 
 type TUserState = {
@@ -20,7 +20,7 @@ type TUserState = {
   error: string | undefined;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: null,
   isAuthCheck: false,
   isLoadingUser: false,
