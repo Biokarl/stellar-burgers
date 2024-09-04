@@ -33,39 +33,47 @@ const expectedResult: typeof initialState = {
   error: undefined
 };
 
-describe('Тест reducer ingredientsSlice', () => {
-  test('Проверка экшена ожидания запроса на получение списка ингридиентов', () => {
-    const state = reducer(
-      initialState,
-      fetchIngredients.pending('ingredients/getAll')
-    );
-
-    expect(state.isIngredientsLoading).toBe(true);
+describe('Тест ingredientsSlice', () => {
+  test('Проверка initialState', () => {
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
-  test('Проверка экшена успешного получения списка ингридиентов', () => {
-    const state = reducer(
-      initialState,
-      fetchIngredients.fulfilled(
-        expectedResult.ingredients,
-        'ingredients/getAll'
-      )
-    );
 
-    expect(state).toEqual(expectedResult);
-  });
-  test('Проверка экшена неудачного получения списка ингридиентов', () => {
-    const state = reducer(
-      initialState,
-      fetchIngredients.rejected(
-        { message: 'Неизвестная ошибка', name: 'Ошибка' },
-        'ingredients/getAll'
-      )
-    );
+  describe('Тест reducer ingredientsSlice', () => {
+    test('Проверка экшена ожидания запроса на получение списка ингридиентов', () => {
+      const state = reducer(
+        initialState,
+        fetchIngredients.pending('ingredients/getAll')
+      );
 
-    expect(state).toEqual({
-      ingredients: [],
-      isIngredientsLoading: false,
-      error: 'Неизвестная ошибка'
+      expect(state.isIngredientsLoading).toBe(true);
+    });
+
+    test('Проверка экшена успешного получения списка ингридиентов', () => {
+      const state = reducer(
+        initialState,
+        fetchIngredients.fulfilled(
+          expectedResult.ingredients,
+          'ingredients/getAll'
+        )
+      );
+
+      expect(state).toEqual(expectedResult);
+    });
+
+    test('Проверка экшена неудачного получения списка ингридиентов', () => {
+      const state = reducer(
+        initialState,
+        fetchIngredients.rejected(
+          { message: 'Неизвестная ошибка', name: 'Ошибка' },
+          'ingredients/getAll'
+        )
+      );
+
+      expect(state).toEqual({
+        ingredients: [],
+        isIngredientsLoading: false,
+        error: 'Неизвестная ошибка'
+      });
     });
   });
 });

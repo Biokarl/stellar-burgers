@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
+  initialState,
   addIngredient,
   reducer,
   removeIngredient,
@@ -121,44 +122,52 @@ const mockDataSortedItems: TConstructorIngredient[] = [
 ];
 
 const store = configureStore({
-  reducer: reducer,
+  reducer,
   preloadedState: mockData
 });
 
-describe('Тест редьюсера слайса burgerConstructor', () => {
-  test('Обработка экшена сортировки ингредиентов в начинке', () => {
-    //Перемещаем ингридиент на позицию выше
-    store.dispatch(moveUpIngredient(1));
-
-    //Проверяем что список ингридиентов соотвествует отсортированному массиву
-    expect(store.getState().ingredients).toEqual(mockDataSortedItems);
-
-    //Перемещаем ингридиент на позицию ниже
-    store.dispatch(moveDownIngredient(0));
-
-    //Проверяем что список ингридиентов соотвествует начальному массиву
-    expect(store.getState().ingredients).toEqual(mockData.ingredients);
+describe('Тест burgerConstructorSlice', () => {
+  test('Проверка initialState', () => {
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
-  test('Обработка экшена добавления ингредиента', () => {
-    //Добавляем ингредиент в конструктор
-    store.dispatch(addIngredient(mockDataToAdd[1]));
-    //Добавляем булочку в конструктор
-    store.dispatch(addIngredient(mockDataToAdd[0]));
 
-    //Проверяем что ингридиентов стало больше на 1
-    expect(store.getState().ingredients.length).toEqual(
-      mockData.ingredients.length + 1
-    );
-    //Проверяем что id булочки поменялся в конструкторе
-    expect(store.getState().bun?._id).not.toBe(mockData.bun._id);
-  });
-  test('Обработка экшена удаления ингредиента', () => {
-    //Удаляем ингридиент из конструктора
-    store.dispatch(removeIngredient(mockData.ingredients[0]));
+  describe('Тест редьюсера слайса burgerConstructor', () => {
+    test('Обработка экшена сортировки ингредиентов в начинке', () => {
+      //Перемещаем ингридиент на позицию выше
+      store.dispatch(moveUpIngredient(1));
 
-    //Проверяем что в конструкторе нет ингридиента, который мы удалили
-    expect(store.getState().ingredients.includes(mockData.ingredients[0])).toBe(
-      false
-    );
+      //Проверяем что список ингридиентов соотвествует отсортированному массиву
+      expect(store.getState().ingredients).toEqual(mockDataSortedItems);
+
+      //Перемещаем ингридиент на позицию ниже
+      store.dispatch(moveDownIngredient(0));
+
+      //Проверяем что список ингридиентов соотвествует начальному массиву
+      expect(store.getState().ingredients).toEqual(mockData.ingredients);
+    });
+
+    test('Обработка экшена добавления ингредиента', () => {
+      //Добавляем ингредиент в конструктор
+      store.dispatch(addIngredient(mockDataToAdd[1]));
+      //Добавляем булочку в конструктор
+      store.dispatch(addIngredient(mockDataToAdd[0]));
+
+      //Проверяем что ингридиентов стало больше на 1
+      expect(store.getState().ingredients.length).toEqual(
+        mockData.ingredients.length + 1
+      );
+      //Проверяем что id булочки поменялся в конструкторе
+      expect(store.getState().bun?._id).not.toBe(mockData.bun._id);
+    });
+
+    test('Обработка экшена удаления ингредиента', () => {
+      //Удаляем ингридиент из конструктора
+      store.dispatch(removeIngredient(mockData.ingredients[0]));
+
+      //Проверяем что в конструкторе нет ингридиента, который мы удалили
+      expect(
+        store.getState().ingredients.includes(mockData.ingredients[0])
+      ).toBe(false);
+    });
   });
 });

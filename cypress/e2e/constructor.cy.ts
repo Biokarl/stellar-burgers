@@ -2,10 +2,7 @@ import { deleteCookie, setCookie } from '../../src/utils/cookie';
 
 before(() => {
   //Создаем моковые токены авторизации
-  setCookie(
-    'accessToken',
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTc2ODk1MTE5ZDQ1MDAxYjRmYzQ0YyIsImlhdCI6MTcyNTIwMDE3MywiZXhwIjoxNzI1MjAxMzczfQ.3vlQcLC0xPD3OKakKeu71p2ZqIzpUx1mCZZ6-g19YR0'
-  );
+  setCookie('accessToken', 'accessToken');
   localStorage.setItem(
     'refreshToken',
     '24bac94e3f91b83ccd7ad414662ca4500d3a8b9e646fc7d5149dcace9db8139872300de7185a5536'

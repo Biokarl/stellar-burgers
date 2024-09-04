@@ -21,19 +21,19 @@ const expectedResult: typeof initialState = {
 };
 
 describe('Тест orderSlice', () => {
-  it('Проверка initialState', () => {
+  test('Проверка initialState', () => {
     expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   describe('Проверка extraReducers', () => {
     describe(' Проверка запроса fetchOrders', () => {
-      it('Тест pending', () => {
+      test('Тест pending', () => {
         const action = { type: fetchOrders.pending.type };
         const state = reducer(initialState, action);
         expect(state.orderRequest).toBe(true);
       });
 
-      it('Проверка экшена неудачного получения списка заказов', () => {
+      test('Проверка экшена неудачного получения списка заказов', () => {
         const action = {
           type: fetchOrders.rejected.type,
           error: { message: 'Failed to fetch feeds' }
@@ -43,7 +43,7 @@ describe('Тест orderSlice', () => {
         expect(state.error).toBe('Failed to fetch feeds');
       });
 
-      it('Проверка экшена успешного получения списка заказов', () => {
+      test('Проверка экшена успешного получения списка заказов', () => {
         const orderResponse = expectedResult.orderModalData;
 
         const action = {
@@ -53,6 +53,7 @@ describe('Тест orderSlice', () => {
           }
         };
         const state = reducer(initialState, action);
+
         expect(state.orderRequest).toBe(false);
         expect(state.orderModalData).toEqual(orderResponse);
       });
@@ -66,9 +67,10 @@ describe('Тест orderSlice', () => {
       store = configureStore({ reducer });
     });
 
-    it('Очистка заказа, перевод состояния загрузки в false', () => {
+    test('Очистка заказа, перевод состояния загрузки в false', () => {
       store.dispatch(orderSlice.actions.cleanSelectedOrder());
       const newState = store.getState();
+
       expect(newState.orderModalData).toBeNull();
       expect(newState.isOrderLoading).toBeFalsy();
     });

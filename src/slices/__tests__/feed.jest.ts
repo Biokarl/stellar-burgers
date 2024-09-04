@@ -1,4 +1,4 @@
-import { getFeeds, feedSlice, initialState } from '../feedSlice';
+import { reducer, getFeeds, feedSlice, initialState } from '../feedSlice';
 
 const expectedResult: typeof initialState = {
   orders: [
@@ -36,39 +36,47 @@ const expectedResult: typeof initialState = {
   error: undefined
 };
 
-describe('Тест reducer feedSlice', () => {
-  test('Проверка экшена ожидания запроса на получение ленты заказов', () => {
-    const state = feedSlice.reducer(
-      initialState,
-      getFeeds.pending('feed/getAll')
-    );
-
-    expect(state.isLoading).toBe(true);
+describe('Тест feedSlice', () => {
+  test('Проверка initialState', () => {
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
-  test('Проверка экшена успешного получения ленты заказов', () => {
-    const state = feedSlice.reducer(
-      initialState,
-      getFeeds.fulfilled({ success: true, ...expectedResult }, 'feed/getAll')
-    );
 
-    expect(state).toEqual(expectedResult);
-  });
-  test('Проверка экшена неудачного получения ленты заказов', () => {
-    const state = feedSlice.reducer(
-      initialState,
-      getFeeds.rejected(
-        { message: 'Неизвестная ошибка', name: 'Ошибка' },
-        'feed/getAll'
-      )
-    );
+  describe('Тест reducer feedSlice', () => {
+    test('Проверка экшена ожидания запроса на получение ленты заказов', () => {
+      const state = feedSlice.reducer(
+        initialState,
+        getFeeds.pending('feed/getAll')
+      );
 
-    expect(state).toEqual({
-      orders: [],
-      order: null,
-      total: 0,
-      totalToday: 0,
-      isLoading: false,
-      error: 'Неизвестная ошибка'
+      expect(state.isLoading).toBe(true);
+    });
+
+    test('Проверка экшена успешного получения ленты заказов', () => {
+      const state = feedSlice.reducer(
+        initialState,
+        getFeeds.fulfilled({ success: true, ...expectedResult }, 'feed/getAll')
+      );
+
+      expect(state).toEqual(expectedResult);
+    });
+
+    test('Проверка экшена неудачного получения ленты заказов', () => {
+      const state = feedSlice.reducer(
+        initialState,
+        getFeeds.rejected(
+          { message: 'Неизвестная ошибка', name: 'Ошибка' },
+          'feed/getAll'
+        )
+      );
+
+      expect(state).toEqual({
+        orders: [],
+        order: null,
+        total: 0,
+        totalToday: 0,
+        isLoading: false,
+        error: 'Неизвестная ошибка'
+      });
     });
   });
 });
