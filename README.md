@@ -1,19 +1,20 @@
-# Проектная работа 11-го спринта
-
-[Макет](<https://www.figma.com/file/vIywAvqfkOIRWGOkfOnReY/React-Fullstack_-Проектные-задачи-(3-месяца)_external_link?type=design&node-id=0-1&mode=design>)
-
-[Чеклист](https://www.notion.so/praktikum/0527c10b723d4873aa75686bad54b32e?pvs=4)
+# Проектная работа Stellar Burger
 
 ## Этапы работы:
 
-1. Разверните проект и ознакомьтесь с кодом. Все необходимые вам компоненты уже созданы и лежат в папке `src/components`
+1.Все компоненты проекта лежат в папке src/components
 
-2. Настройте роутинг.
+2.Настроен роутинг.
 
-3. Напишите функционал запросов данных с сервера, используя `Redux` и глобальный `store`. Сами "ручки" уже прописаны и лежат в `utils/burger-api.ts`
+3.Создан функционал запросов данных с сервера, с использованием Redux и глобального store. Все способы взаимодействия с сервером описаны в utils/burger-api.ts
 
-4. Настройте авторизацию и создайте защищённые роуты.
+4.Настроена авторизация и созданы защищённые роуты.
 
-## Важно:
+##Функционал:
+Регистрация/вход/аутентификация пользователей
+Возможность собрать из ингредиентов бургер и оформить заказ
+Просмотр ленты всех заказов и своих заказов в профиле
+Страница конструктора бургера покрыта тестами e2e (cypress) и тестами компонентов (jest)
 
-Для корректной работы запросов к серверу необходимо добавить переменную BURGER_API_URL в окружение. Сама ссылка находится в файле `.env.example`.
+## Стэк, используемых технологий:
+<img src="https://camo.githubusercontent.com/9c1342029e8aec68e9f53e276d6852ee30b7cd21c715f53e18b87d460de77241/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4a6176615363726970742d626c61636b3f7374796c653d666c61742d737175617265266c6f676f3d6a617661736372697074" alt="JavaScript" data-canonical-src="https://img.shields.io/badge/-JavaScript-black?style=flat-square&amp;logo=javascript" style="max-width: 100%;"> <img alt="React" src="https://camo.githubusercontent.com/9ea39a145870ab0cea89d021e33cacd20d1b833764284b3579c3d0713da87262/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d52656163742d3435623864383f7374796c653d666c61742d737175617265266c6f676f3d7265616374266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-React-45b8d8?style=flat-square&amp;logo=react&amp;logoColor=white" style="max-width: 100%;"> <img src="https://camo.githubusercontent.com/c0f60c84bd23525a0f1e5972ff5052f878eb4104e88b347b7f0004d0e6ad8898/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d48544d4c352d4533344632363f7374796c653d666c61742d737175617265266c6f676f3d68746d6c35266c6f676f436f6c6f723d7768697465" alt="HTML5" data-canonical-src="https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&amp;logo=html5&amp;logoColor=white" style="max-width: 100%;"> <img src="https://camo.githubusercontent.com/d2de8f341090cb9d72d132ef5f73c2a2c9be3081193bd9c7f3fee5b4973ece27/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d435353332d3135373242363f7374796c653d666c61742d737175617265266c6f676f3d63737333" alt="CSS3" data-canonical-src="https://img.shields.io/badge/-CSS3-1572B6?style=flat-square&amp;logo=css3" style="max-width: 100%;"> <img alt="TypeScript" src="https://camo.githubusercontent.com/bd23728a12155fbd3a26349b45fc8ed5342d104428f9861d1faebc247a476cb0/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d547970655363726970742d3030374143433f7374796c653d666c61742d737175617265266c6f676f3d74797065736372697074266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&amp;logo=typescript&amp;logoColor=white" style="max-width: 100%;"> <img alt="redux" src="https://camo.githubusercontent.com/ba8df802f40b2670b90f9aea8bf9841b97b64c484dc927372650d511b2606458/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d52656475782d3736344142433f7374796c653d666c61742d737175617265266c6f676f3d7265647578266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Redux-764ABC?style=flat-square&amp;logo=redux&amp;logoColor=white" style="max-width: 100%;"> <img alt="Sass" src="https://camo.githubusercontent.com/0e6ba19debf2cc3fc4b0cd637eef4176d59de7c38c8981bc93730eec159670d6/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d536173732d4343363639393f7374796c653d666c61742d737175617265266c6f676f3d73617373266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Sass-CC6699?style=flat-square&amp;logo=sass&amp;logoColor=white" style="max-width: 100%;"> <img alt="git" src="https://camo.githubusercontent.com/79536ab835520583d9f0eebc002614e4e53f0e17e3bbd6ff55a83ea47afe4420/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4769742d4630353033323f7374796c653d666c61742d737175617265266c6f676f3d676974266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Git-F05032?style=flat-square&amp;logo=git&amp;logoColor=white" style="max-width: 100%;"> <img alt="npm" src="https://camo.githubusercontent.com/0bdc553748cd750575d0bda27168ff0890c7cf4e22b37e5b87c07b45538a3f62/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d4e504d2d4342333833373f7374796c653d666c61742d737175617265266c6f676f3d6e706d266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-NPM-CB3837?style=flat-square&amp;logo=npm&amp;logoColor=white" style="max-width: 100%;"> <img alt="Prettier" src="https://camo.githubusercontent.com/156edc39390fbd25cc6416407734508aabf5caffe606858fea7095f913650354/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d50726574746965722d4637423933453f7374796c653d666c61742d737175617265266c6f676f3d7072657474696572266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Prettier-F7B93E?style=flat-square&amp;logo=prettier&amp;logoColor=white" style="max-width: 100%;"> <img alt="Webpack" src="https://camo.githubusercontent.com/d3a35f56dc596e38f2437a101c01b133a84000714d8e2925fcc6f4470c6fd925/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d5765627061636b2d3844443646393f7374796c653d666c61742d737175617265266c6f676f3d7765627061636b266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/-Webpack-8DD6F9?style=flat-square&amp;logo=webpack&amp;logoColor=white" style="max-width: 100%;">
