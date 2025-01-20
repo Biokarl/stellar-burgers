@@ -13,63 +13,140 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
-import { fetchIngredients } from '../../redux/ingredientsSlice';
+import { fetchIngredients } from '../../slices/ingredientsSlice';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import { getFeeds } from '../../slices/feedSlice';
+import { authChecked, checkAuthUser } from '../../slices/userSlice';
 
 const App = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
 
   useEffect(() => {
-    dispatch(fetchIngredients());
+    Promise.all([dispatch(fetchIngredients()), dispatch(getFeeds())]);
   }, []);
+
+  useEffect(() => {
+    dispatch(checkAuthUser()).finally(() => dispatch(authChecked()));
+  }, [dispatch, authChecked]);
 
   return (
     <>
       <div className={styles.app}>
         <AppHeader />
 
-        <Routes>
+        <Routes location={backgroundLocation || location}>
           <Route path='/' element={<ConstructorPage />} />
           <Route path='/feed' element={<Feed />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/profile'>
-            <Route index element={<Profile />} />
-            <Route path='orders' element={<ProfileOrders />} />
-          </Route>
-          <Route path='*' element={<NotFound404 />} />
-        </Routes>
 
-        <Routes>
           <Route
-            path='/feed/:number'
+            path='/login'
             element={
-              <Modal title={'asd'} onClose={() => console.log(1)}>
-                <OrderInfo />
-              </Modal>
+              <ProtectedRoute>
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path='/register'
+            element={
+              <ProtectedRoute>
+                <Register />
+              </ProtectedRoute>
             }
           />
           <Route
-            path='/ingredients/:id'
+            path='/forgot-password'
             element={
-              <Modal title={'123'} onClose={() => console.log(2)}>
-                <IngredientDetails />
-              </Modal>
+              <ProtectedRoute>
+                <ForgotPassword />
+              </ProtectedRoute>
             }
           />
+          <Route
+            path='/reset-password'
+            element={
+              <ProtectedRoute>
+                <ResetPassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/profile'>
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='orders'
+              element={
+                <ProtectedRoute>
+                  <ProfileOrders />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route path='/feed/:number' element={<OrderInfo />} />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title={'zxc'} onClose={() => console.log(3)}>
+              <ProtectedRoute>
                 <OrderInfo />
-              </Modal>
+              </ProtectedRoute>
             }
           />
+          <Route path='*' element={<NotFound404 />} />
         </Routes>
+
+        {backgroundLocation && (
+          <Routes>
+            <Route
+              path='/feed/:number'
+              element={
+                <Modal
+                  title={'Информация о заказе'}
+                  onClose={() => navigate('/feed')}
+                >
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+            <Route
+              path='/ingredients/:id'
+              element={
+                <Modal
+                  title={'Детали ингредиента'}
+                  onClose={() => navigate('/')}
+                >
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path='/profile/orders/:number'
+              element={
+                <ProtectedRoute>
+                  <Modal
+                    title={'Информация о заказе'}
+                    onClose={() => navigate('/profile/orders')}
+                  >
+                    <OrderInfo />
+                  </Modal>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        )}
       </div>
     </>
   );

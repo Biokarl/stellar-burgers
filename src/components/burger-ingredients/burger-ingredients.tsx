@@ -6,7 +6,13 @@ import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
-  const { buns, mains, sauces } = useSelector((store) => store.ingredients);
+  const { ingredients } = useSelector((store) => store.ingredients);
+
+  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
+  const mains = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const sauces = ingredients.filter(
+    (ingredient) => ingredient.type === 'sauce'
+  );
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);

@@ -101,7 +101,7 @@ export const getOrdersApi = () =>
 
 type TNewOrderResponse = TServerResponse<{
   order: TOrder;
-  name: string;
+  name?: string;
 }>;
 
 export const orderBurgerApi = (data: string[]) =>
