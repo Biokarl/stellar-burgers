@@ -82,6 +82,7 @@ module.exports = {
     }
   },
   output: {
+    publicPath: 'https://biokarl.github.io/stellar-burgers/',
     path: path.resolve(__dirname, './dist'),
     filename: 'bundle.js'
   },
